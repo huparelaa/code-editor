@@ -72,7 +72,6 @@ int decompress(const char* file_name)
     // Get the base name of the input file
     fs::path input_path(file_name);
     std::string base_name = input_path.stem().string();
-    std::cout << "Base name: " << base_name << std::endl;
 
     // Open the output file with the new name
     std::string output_file_name = "../decompressed_files/" + base_name;
