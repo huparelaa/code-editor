@@ -1,45 +1,50 @@
-#include <ncurses.h>
+#include <iostream>
 #include <string>
-#include <vector>
-#include <cstring>
-#include "../LZW/compress.cpp"
-#include "../LZW/decompress.cpp"
+#include <filesystem>
+#include "inputHandler.cpp"  // Asegúrate de que la ruta sea correcta y accesible
 
 class TextEditor {
-public:
-    TextEditor() {
-        initscr();              // Inicia el modo curses
-        raw();                  // Desactiva el buffering de línea
-        keypad(stdscr, TRUE);   // Permite la lectura de teclas de función, flechas, etc.
-        noecho();               // No muestra los caracteres ingresados
-    }
+    InputHandler inputHandler;
+    std::string currentFile;
+    std::string content;
 
-    ~TextEditor() {
-        endwin();               // Termina el modo curses
-    }
+public:
+    TextEditor() {}
 
     void run() {
-        std::string line;
-        int ch;
-        while ((ch = getch()) != KEY_F(1)) { // F1 para salir
+        char ch;
+        inputHandler.showHelp();
+        std::cout << "Enter 'q' to exit.\n";
+        while (std::cin >> ch && ch != 'q') {  // 'q' para salir
             switch (ch) {
-                case KEY_BACKSPACE:
-                case 127: // Manejo del backspace
-                    if (!line.empty()) {
-                        line.pop_back();
-                        int y, x;
-                        getyx(stdscr, y, x);
-                        move(y, x-1);
-                        delch();
+                // print ">" to indicate that the user can enter a command ascii 62
+
+                printf(">");
+                
+                case 'c': {
+                    std::string filename;
+                    std::cout << "Enter new filename: ";
+                    std::cin >> filename;
+                    inputHandler.createFile(filename);
+                    break;
+                }
+                case 'o': {
+                    std::string openFilename;
+                    std::cout << "Enter filename to open: ";
+                    std::cin >> openFilename;
+                    if (!inputHandler.openFile(openFilename, content)) {
+                        std::cout << "File does not exist.\n";
+                    } else {
+                        std::cout << "File content:\n" << content << std::endl;
                     }
                     break;
-                case '\n': // Enter
-                    line.clear();
-                    printw("\n");
+                }
+                case 's':
+                    inputHandler.listFiles();
                     break;
-                default:
-                    line.push_back(ch);
-                    printw("%c", ch);
+                case 'h':
+                    inputHandler.showHelp();
+                    break;
             }
         }
     }
