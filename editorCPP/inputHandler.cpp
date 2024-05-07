@@ -2,10 +2,12 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include "names.cpp"
 
 namespace fs = std::filesystem;
 
 class InputHandler {
+    Names names;
 public:
     void createFile(const std::string& filename) {
         system("mkdir -p ../decompressed_files");  // Crea el directorio si no existe
@@ -23,9 +25,7 @@ public:
     }
 
     void listFiles() {
-        for (const auto& entry : fs::directory_iterator("compressed_files/")) {
-            printf("%s\n", entry.path().filename().c_str());
-        }
+        names.show_compressed_files("../compressed_files");
     }
 
     void showHelp() {

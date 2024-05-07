@@ -13,19 +13,21 @@ public:
 
     void run() {
         char ch;
+        system("clear");
         inputHandler.showHelp();
         std::cout << "Enter 'q' to exit.\n";
         while (std::cin >> ch && ch != 'q') {  // 'q' para salir
             switch (ch) {
                 // print ">" to indicate that the user can enter a command ascii 62
-
-                printf(">");
                 
                 case 'c': {
+                    system("clear");
                     std::string filename;
                     std::cout << "Enter new filename: ";
                     std::cin >> filename;
                     inputHandler.createFile(filename);
+                    system("clear");
+                    std::cout << "File created.\n";
                     break;
                 }
                 case 'o': {

@@ -1,2 +1,2 @@
 compile: 
-	g++ -o main main.cpp inputHandler.cpp -lncurses
+	g++ -o main main.cpp inputHandler.cpp names.cpp -lncurses
