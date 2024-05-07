@@ -31,6 +31,6 @@ void files(const std::string &a_carpeta)
 
 int main()
 {
-    files("/mnt/c/Users/andre/OneDrive/Documentos/Semestre-7/SistemasOperativos/code-editor/compressed_files");
+    files("../compressed_files");
     return 0;
 }
