@@ -7,9 +7,11 @@
 
 class EditMode {
 public:
+    std::string content;  // Búfer de texto en memoria
+
     void openEditMode(const std::string& filename) {
         std::string path = "../decompressed_files/" + filename;
-        std::string content = readFile(path);
+        content = readFile(path);
 
         initscr();              // Start ncurses mode
         raw();                  // Line buffering disabled
@@ -21,31 +23,34 @@ public:
         int col = 0;
         printContent(content, row, col);
 
-        std::cout<<"Press F4 to exit\n"<<std::endl;
-
         while((ch = getch()) != KEY_F(4)) { // F4 key to exit
             switch(ch) {
                 case KEY_BACKSPACE:
                 case 127:
                     if (col > 0) {
                         mvdelch(row, --col); // Move back one column and delete char
+                        content.erase(content.end() - 1);  // Remove last character from content
                     } else if (row > 0) {
-                        row--;
-                        col = getLineLength(row); // Move up a line and to the end of that line
+                        --row;
+                        col = getLineLength(row);
                         move(row, col);
+                        content.erase(content.end() - 1);  // Remove newline character
                     }
                     break;
                 case '\n':
-                    col = 0;
+                    mvaddch(row, col++, ch); // Display newline and move right
+                    content += ch;  // Add newline to content
                     row++;
+                    col = 0;
                     break;
                 default:
                     mvaddch(row, col++, ch); // Display character and move right
+                    content += ch;  // Add character to content
                     break;
             }
         }
 
-        saveToFile(path, collectContent());
+        saveToFile(path, content);
         endwin(); // End ncurses mode
     }
 
