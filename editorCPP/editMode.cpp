@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "../LZW/compress.h"
 
 class EditMode {
 public:
@@ -20,9 +21,9 @@ public:
         int col = 0;
         printContent(content, row, col);
 
-        std::cout<<"Press F1 to exit\n"<<std::endl;
+        std::cout<<"Press F4 to exit\n"<<std::endl;
 
-        while((ch = getch()) != KEY_F(1)) { // F1 key to exit
+        while((ch = getch()) != KEY_F(4)) { // F4 key to exit
             switch(ch) {
                 case KEY_BACKSPACE:
                 case 127:
@@ -93,7 +94,16 @@ private:
     }
 
     void saveToFile(const std::string& path, const std::string& content) {
-        std::ofstream file(path);
-        file << content;
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file for saving changes.\n";
+        return;
     }
+
+    file << content;
+    file.close();
+
+    compress(path.c_str());
+    system(("rm " + path).c_str());
+}
 };

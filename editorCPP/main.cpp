@@ -29,6 +29,7 @@ public:
                     std::cin >> filename;
                     inputHandler.createFile(filename);
                     system("clear");
+                    editMode.openEditMode(filename);
                     std::cout << "File created.\n";
                     break;
                 }
