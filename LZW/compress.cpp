@@ -36,7 +36,14 @@ int compress(const char* file_name)
         }
     }
 
-    FILE *output_file = fopen("../compressed_files/compressed.dat", "wb");
+    // Get the base name of the input file
+    fs::path input_path(file_name);
+    std::string base_name = input_path.stem().string();
+    std::string extension = input_path.extension().string();
+
+    // Open the output file with the new name
+    std::string output_file_name = "../compressed_files/" + base_name + extension + ".compressed";
+    FILE *output_file = fopen(output_file_name.c_str(), "wb");
 
     if (!output_file)
     {

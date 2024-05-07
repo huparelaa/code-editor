@@ -1,10 +1,14 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
-#include "inputHandler.cpp"  // Asegúrate de que la ruta sea correcta y accesible
+#include "inputHandler.cpp"
+#include "../LZW/decompress.h"
+#include "editMode.cpp"
 
 class TextEditor {
     InputHandler inputHandler;
+    FileManager fileManager;
+    EditMode editMode;
     std::string currentFile;
     std::string content;
 
@@ -18,8 +22,6 @@ public:
         std::cout << "Enter 'q' to exit.\n";
         while (std::cin >> ch && ch != 'q') {  // 'q' para salir
             switch (ch) {
-                // print ">" to indicate that the user can enter a command ascii 62
-                
                 case 'c': {
                     system("clear");
                     std::string filename;
@@ -34,10 +36,14 @@ public:
                     std::string openFilename;
                     std::cout << "Enter filename to open: ";
                     std::cin >> openFilename;
-                    if (!inputHandler.openFile(openFilename, content)) {
-                        std::cout << "File does not exist.\n";
-                    } else {
-                        std::cout << "File content:\n" << content << std::endl;
+                    bool found = fileManager.find_file("../compressed_files", openFilename);
+                    if (found){
+                        std::string fullFilename = openFilename + ".compressed";
+                        decompress(fullFilename.c_str());
+                        editMode.openEditMode(openFilename);
+                        std::cout << "File opened.\n";
+                    }else{
+                        std::cout <<"File doesn't exists. Pipipipi"<<std::endl;
                     }
                     break;
                 }
@@ -47,13 +53,15 @@ public:
                 case 'h':
                     inputHandler.showHelp();
                     break;
+                default:
+                    std::cout << "Invalid command.\n";
+                    break;
             }
         }
     }
 };
 
 int main() {
-
     TextEditor editor;
     editor.run();
     return 0;
