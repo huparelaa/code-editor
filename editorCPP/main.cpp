@@ -21,6 +21,7 @@ public:
         inputHandler.showHelp();
         std::cout << "Enter 'q' to exit.\n";
         while (std::cin >> ch && ch != 'q') {  // 'q' para salir
+
             switch (ch) {
                 case 'c': {
                     system("clear");
@@ -28,12 +29,12 @@ public:
                     std::cout << "Enter new filename: ";
                     std::cin >> filename;
                     inputHandler.createFile(filename);
-                    system("clear");
                     editMode.openEditMode(filename);
                     std::cout << "File created.\n";
                     break;
                 }
                 case 'o': {
+                    system("clear");
                     std::string openFilename;
                     std::cout << "Enter filename to open: ";
                     std::cin >> openFilename;
@@ -44,19 +45,25 @@ public:
                         editMode.openEditMode(openFilename);
                         std::cout << "File opened.\n";
                     }else{
-                        std::cout <<"File doesn't exists. Pipipipi"<<std::endl;
+                        std::cout <<"File doesn't exists."<<std::endl;
                     }
                     break;
                 }
                 case 's':
+                    system("clear");
                     inputHandler.listFiles();
                     break;
                 case 'h':
+                    system("clear");
                     inputHandler.showHelp();
                     break;
                 default:
                     std::cout << "Invalid command.\n";
+                    inputHandler.showHelp();
                     break;
+
+                inputHandler.showHelp();
+                
             }
         }
     }

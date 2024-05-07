@@ -36,6 +36,6 @@ public:
 
     void showHelp()
     {
-        printf("c: Create file, o: Open file, s: Show files, h: Help\n");
+        printf("c: Create file, o: Open file, s: Show files, h: Help, q:Exit\n");
     }
 };
